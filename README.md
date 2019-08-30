@@ -1,5 +1,8 @@
 # av_diarization
 
+# Project Overview
+The project can be split into two primary task. The first task is the case where the user provides a text file with a list of celebrites or persons of interest. For each person in the text, the system identifies times segments in a youtube video when that person is talking and stores the time segments as a text file. This task is a supervised search of a specific individual in a youtube video. The second task is unsupervised. This system was develop for the case where there might not be enough data for individuals in a particular language, eg. GA Language. In this scenario, the user provides a youtube channel where the people in that channel speak that relatively obscure language.
+
 # possible downloads
 First thing is to go on this website and download face landmark detection file and place in the utils/conf.
 https://www.dropbox.com/sh/t5h024w0xkedq0j/AABS3GprqIvb_PwqeHOn2dxNa?dl=0&file_subpath=%2Fshape_predictor_194_face_landmarks.dat&preview=shape_predictor_194_face_landmarks.zip
