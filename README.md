@@ -1,29 +1,52 @@
 # av_diarization
 
-# Project Overview
-The project can be split into two primary task. The first task is the case where the user provides a text file with a list of celebrites or persons of interest. For each person in the text, the system identifies times segments in a youtube video when that person is talking and stores the time segments as a text file. This task is a supervised search of a specific individual in a youtube video. The second task is unsupervised. This system was develop for the case where there might not be enough data for individuals in a particular language, eg. GA Language. In this scenario, the user provides a youtube channel where the people in that channel speak that relatively obscure language.
+### Project Overview
+The project can be split into two primary task. The first task is the case where the user provides a text file with a list of celebrites or persons of interest. For each person in the text, the system identifies times segments in a youtube video when that person is talking and stores the time segments as a text file. This task is a supervised search of a specific individual in a youtube video. The second task is unsupervised. This system was develop for the case where there might not be enough data for individuals in a particular language, eg. GA Language. In this scenario, the user provides a youtube channel where the people in that channel speak that relatively obscure language. The system then downloads videos from this channel and performs both intra-video clustering and inter-video clustering to obtain unique voices of various speakers.
 
-# possible downloads
+- ### Supervised Audio Visual Diarization
+  The input to this system is just a name. The system then follows the procedure outlined below and returns time segments in a youtube video when the individual is talking.
+  - #### Step 1: Download Images
+      The system takes in as input a name, eg. Desmond Caulley, and appends the word "face" or "photo" to it - i.e "Desmond Caulley photo." The system then performs automatic goole images search and downloads the top K results.
+      ```
+      Eg usage: utils/download_images.py --search_term="Desmond Caulley face" --num_images=25 --output_dir='~/output_folder'
+      ```
+   - #### Step 2: Face Templates
+      The primary reasons for the images download is to use them to create a "template face" that will be used to compare to faces in a youtube video. The idea is that by searching for a person face using google-images. Most of the pictures returned will be the person of interest. There may be the pictures which belong to other people. To solve this issue, the pictures were download and Haar based face detection was ran across all pictures. A VGG-face feature vector is extracted for each face. Lastly DBSCAN clustering was used to cluster faces with distance threshold set to 0.4. We assume the largest cluster after DBSAN will belong to the person of interest. We then average the vectors that belong to the largest cluster - this vector is what will be the template face.
+      ```
+      Eg usage: utils/face_templates.py --img_dir="download_images_dir --output_file="templat_face.npy'
+      ```
+    - #### Step 3: Download Youtube Videos
+      The system takes in as input a name, eg. Desmond Caulley, and appends the word "interview" to it - i.e "Desmond Caulley interview." The system then uses youtube-dl to download top K video results from this search.
+      ```
+      Eg usage: utils/download_videos.py --search_term="Desmond Caulley interview" --num_videos=10 --output_dir='~/output_vid_folder'
+      ```
+      
+    - #### Step 3: Download Youtube Videos
+      The system takes in as input a name, eg. Desmond Caulley, and appends the word "interview" to it - i.e "Desmond Caulley interview." The system then uses youtube-dl to download top K video results from this search.
+      ```
+      Eg usage: utils/download_videos.py --search_term="Desmond Caulley interview" --num_videos=10 --output_dir='~/output_vid_folder'
+
+### possible downloads
 First thing is to go on this website and download face landmark detection file and place in the utils/conf.
 https://www.dropbox.com/sh/t5h024w0xkedq0j/AABS3GprqIvb_PwqeHOn2dxNa?dl=0&file_subpath=%2Fshape_predictor_194_face_landmarks.dat&preview=shape_predictor_194_face_landmarks.zip
 
 
-# Running Code:
+### Running Code:
 Call the script ./run_main.sh.
 This script reads line by line a textfile of names and calls ./run_av_recipe.sh
 
 You can run the code on a single person by directly calling ./run_av_recipe.sh args
 
-# Possible error
+### Possible error
 error with finding TrackerCSRT() in face_verification_tracking.py. This has to do with opencv version
 
 
-# Running Unsupervised
+### Running Unsupervised
 Need to call ./run_unsupervised_diarization.sh.
 
 need to input a list of channels into that script for it to run
 
-# Utilities
+### Utilities
 `check_total.py` - takes as input a directory with .txt files. Each .txt file contains IDed time segments for a particular celeb. This script sums up all the times in all the .txt files
 
 
