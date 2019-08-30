@@ -11,20 +11,49 @@ The project can be split into two primary task. The first task is the case where
       Eg usage: utils/download_images.py --search_term="Desmond Caulley face" --num_images=25 --output_dir='~/output_folder'
       ```
    - #### Step 2: Face Templates
-      The primary reasons for the images download is to use them to create a "template face" that will be used to compare to faces in a youtube video. The idea is that by searching for a person face using google-images. Most of the pictures returned will be the person of interest. There may be the pictures which belong to other people. To solve this issue, the pictures were download and Haar based face detection was ran across all pictures. A VGG-face feature vector is extracted for each face. Lastly DBSCAN clustering was used to cluster faces with distance threshold set to 0.4. We assume the largest cluster after DBSAN will belong to the person of interest. We then average the vectors that belong to the largest cluster - this vector is what will be the template face.
+      The primary reasons for the images download is to use them to create a "template face" that will be used to compare to faces in a youtube video. The idea is that by searching for a person face using google-images. Most of the pictures returned will be the person of interest. There may be the pictures which belong to other people. To solve this issue, the pictures were download and Histogram of Oriented Gradients (HOG) based face detection was ran across all pictures. A VGG-face feature vector is extracted for each face. Lastly DBSCAN clustering was used to cluster faces with distance threshold set to 0.4. We assume the largest cluster after DBSAN will belong to the person of interest. We then average the vectors that belong to the largest cluster - this vector is what will be the template face.
       ```
-      Eg usage: utils/face_templates.py --img_dir="download_images_dir --output_file="templat_face.npy'
+      Eg usage: ./utils/face_templates.py --img_dir="download_images_dir --output_file="templat_face.npy'
       ```
     - #### Step 3: Download Youtube Videos
       The system takes in as input a name, eg. Desmond Caulley, and appends the word "interview" to it - i.e "Desmond Caulley interview." The system then uses youtube-dl to download top K video results from this search.
       ```
-      Eg usage: utils/download_videos.py --search_term="Desmond Caulley interview" --num_videos=10 --output_dir='~/output_vid_folder'
+      Eg usage: ./utils/download_videos.py --search_term="Desmond Caulley interview" --num_videos=10 --output_dir='~/output_vid_folder'
       ```
       
-    - #### Step 3: Download Youtube Videos
-      The system takes in as input a name, eg. Desmond Caulley, and appends the word "interview" to it - i.e "Desmond Caulley interview." The system then uses youtube-dl to download top K video results from this search.
+    - #### Step 3: Face Detection, Verification, Tracking
+      The next step is to find the template face in the youtube videos. For each youtube video, we first use pyscenedetect package to break down the video into various scenes and shots. For each scene, we run HOG face detection. We then compared each detected face to our template face for a match - verification. The threshold for verifying the template face with detected face is max_distance=0.35.  Once a face is verified, we track that face using OpenCV's implementation of CSRT. To make sure we are properly tracking a face, we take a histogram of the face when it's first detected. For each subsequent frame, we compare the histogram of the tracked face with the original histogram. Threshold for correct histogram tracking is set at 0.85.
       ```
-      Eg usage: utils/download_videos.py --search_term="Desmond Caulley interview" --num_videos=10 --output_dir='~/output_vid_folder'
+      Eg usage: ./utils/face_verification_tracking.py --video_file="inputvid.mp4" --template_file="template_face.npy" --output_scenes="scenes.pckl" --output_faces="faces.pckl" --scoring_type="cosine" --threshold=0.35
+      
+    - #### Step 3: Smoothing and Crop Videos (Syncnet Implementation)
+      Once the faces have been detected and tracked, we need to smooth out the boundary boxes of the face. This is a median smoothing of the temporal evolution of rectangle parameter for a face. Mini videos are cropped which will be passed into a syncnet.
+      ```
+      Eg usage: python ./syncnet_python_rev/run_pipeline.py --video_file="input_vid" --data_dir="output_dir" --reference="video_id" --scenes_file="scenes.pckl" --search_faces=0 --faces_file=faces.pckl" --min_track=25
+      
+    - #### Step 4: Syncnet
+      Syncnet is used to determine offset between face and lips movement with the audio. If there is delay between audio and video, absolute value of the offset is 0. If the video doesn't match audio, offset is large. Additionally, sycnet outputs a confidence value. The higher the confidence value, the more confident sync_net is about the given offset.
+      ```
+      Eg usage: python ./syncnet_python_rev/run_syncnet_cuda.py --data_dir="output_dir" --reference="video_id"
+      
+   - #### Step 4: Post Processing
+      The last step it processing the output of syncet and correctly identifying the time segments where syncet was confident there was audio-video synchronization. The output is a text file with times intervals where the particular person of interest was in a video and talking.
+      ```
+      Eg usage: ./utils/audio_visual_sync_match.py --exp_dir="exp_dir" --video_id="vid_name" --output_file="vid_name.txt
+
+
+
+
+
+
+- ### Unsupervised Audio Diarization
+  The input to this system is just a name. The system then follows the procedure outlined below and returns time segments in a youtube video when the individual is talking.
+  - #### Step 1: Download Images
+      The system takes in as input a name, eg. Desmond Caulley, and appends the word "face" or "photo" to it - i.e "Desmond Caulley photo." The system then performs automatic goole images search and downloads the top K results.
+      ```
+      Eg usage: utils/download_images.py --search_term="Desmond Caulley face" --num_images=25 --output_dir='~/output_folder'
+      ```
+
 
 ### possible downloads
 First thing is to go on this website and download face landmark detection file and place in the utils/conf.
