@@ -1,5 +1,20 @@
 # av_diarization
 
+### Project Setup
+- Create python3 environment - tested using python=3.6.5
+- Install all packages found in requirements.txt file
+  - Also install ffmpeg = 3.4.2  -- any version should be fine I think
+- Install the specific versions of those packages.
+- run "sh download_model.sh" under syncnet_python_rev
+  - Might not be necessary. But do this if there are "protos" error.
+ 
+### Running Code:
+ - create list of names in textfile. eg. 
+Call the script ./run_main.sh.
+This script reads line by line a textfile of names and calls ./run_av_recipe.sh
+
+You can run the code on a single person by directly calling ./run_av_recipe.sh args
+
 ### Project Overview
 The project can be split into two primary task. The first task is the case where the user provides a text file with a list of celebrites or persons of interest. For each person in the text, the system identifies times segments in a youtube video when that person is talking and stores the time segments as a text file. This task is a supervised search of a specific individual in a youtube video. The second task is unsupervised. This system was develop for the case where there might not be enough data for individuals in a particular language, eg. GA Language. In this scenario, the user provides a youtube channel where the people in that channel speak that relatively obscure language. The system then downloads videos from this channel and performs both intra-video clustering and inter-video clustering to obtain unique voices of various speakers.
 
@@ -9,7 +24,7 @@ The project can be split into two primary task. The first task is the case where
   - #### Step 1: Download Images
       The system takes in as input a name, eg. Desmond Caulley, and appends the word "face" or "photo" to it - i.e "Desmond Caulley photo." The system then performs automatic goole images search and downloads the top K results.
       ```
-      Eg usage: utils/download_images.py --search_term="Desmond Caulley face" --num_images=25 --output_dir='~/output_folder'
+      Eg usage: ./utils/download_images.py --search_term="Desmond Caulley face" --num_images=25 --output_dir='~/output_folder'
       ```
       
    - #### Step 2: Face Templates
@@ -58,7 +73,25 @@ The project can be split into two primary task. The first task is the case where
       ```
       Eg usage: ./utils/download_videos_channel.py  --youtube_channel="channel_url"  --match_term="match_word" --num_videos=100 --output_dir="output_dir"
       ```
-
+      
+     - #### Step 2: Complete Face Tracking
+        For each video downloaded video, the system does face tracking for all faces that appear in the video.  This part of the system is heavily borrowed from the syncnet pre-processing software.  The output is mini-tracklets/video_crops of various tracked faces from the video. A modification to the syncnet code is the addition of the input term search_faces, which is set for 1 in this case. For the supervised case, search_faces is set to 0 since face search is done by utils/face_verification_tracking.py module
+        ```
+        Eg usage: python ./syncnet_python_rev/run_pipeline.py --video_file="input_vid" --data_dir="output_dir" --reference="video_id" --scenes_file="scenes.pckl" --search_faces=1  --min_track=25
+        ```
+        
+     - #### Step 3: Within video clustering
+        Minitracklets, which are the outputs of the `./syncnet_python_rev/run_pipeline.py`, needs to be clustered. To do this, we sample a few frames, maybe 20, from each mini_tracklet and do face recognition on each frame. The system then performs face recognition and extracts VGG-face vectors. The vectors are averaged and will be the representative vector for that tracklet. Last, the system uses agglomerative clustering with threshold set to 0.4 to determine which tracklets belong together.
+        ```
+        Eg usage: ./utils/visual_diarization_single.py --exp_dir="video_processing_folder" --curr_vid="vid_name" --output_dir="output_dir/visual_diarization" --min_time=200
+        ```
+           
+     - #### Step 3: Across video clustering
+        Without doing this across video clustering, we will be assuming that individuals in one video do not appear in other videos. Thus if we got 3 people in video A and 4 people in video B, then there will be a total of 7 people with 7 unique voices. However, we know some people might appear in both video A and video B and we can do across video clustering to solve this problem. This clustering is also done using agglomerative clustering method with threshold set to 0.4.
+        ```
+        Eg usage: ./utils/visual_diarization_across.py --exp_dir="video_processing_folder" --output_dir="exp_dir/unsup_output"
+        ```
+        
 
 ### possible downloads
 First thing is to go on this website and download face landmark detection file and place in the utils/conf.
