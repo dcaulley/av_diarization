@@ -21,7 +21,9 @@ The project can be split into two primary task. The first task is the case where
 - ### Supervised Audio Visual Diarization
   The input to this system is just a name. The system then follows the procedure outlined below and returns time segments in a youtube video when the individual is talking.
   
-  <img  width="600" align="center" src="https://github.com/dcaulley/av_diarization/blob/master/presentations/supervised_overview.png"/>
+  <p align="center">
+  <img  width="600" src="https://github.com/dcaulley/av_diarization/blob/master/presentations/supervised_overview.png"/>
+  </p>
   
   - #### Step 1: Download Images
       The system takes in as input a name, eg. Desmond Caulley, and appends the word "face" or "photo" to it - i.e "Desmond Caulley photo." The system then performs automatic goole images search and downloads the top K results.
