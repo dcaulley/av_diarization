@@ -2,7 +2,7 @@
 
 ### Project Setup
 - Create python3 environment - tested using python=3.6.5
-- Install all packages found in requirements.txt file
+- Install all packages found in `requirements.txt` file
   - Also install ffmpeg = 3.4.2  -- any version should be fine I think
 - Install the specific versions of those packages.
 - run "sh download_model.sh" under syncnet_python_rev
@@ -11,12 +11,12 @@
 ### Running Code:
   - #### Running Supervised Script
      - create list of names in textfile. eg. celeb_names.lst
-     - run script "./run_main.sh"
-     - Eg: ./run_main.sh  names_list gpu_num exp_dir
-     - Eg: ./run_main.sh  celeb_names.lst 1 exp_ex
+     - run script `./run_main.sh`
+     - Eg: `./run_main.sh  names_list   gpu_num   exp_dir`
+     - Eg: `./run_main.sh  celeb_names.lst   1  exp_ex`
 
-       This script reads line by line a textfile of names and calls ./run_av_recipe.sh
-       You can run the code on a single person by directly calling ./run_av_recipe.sh args
+       This script reads a text file line by line and calls `./run_av_recipe.sh`
+       You can run the code on a single person by directly calling `./run_av_recipe.sh args`
        
      - Folder Structure
      
@@ -27,7 +27,7 @@
             - video_processing
               - `85gmwnfty7o` --> youtube ID
                 - pyavi
-                  - video.avi --> modified video that is used for all processing. deleted after processing to save space
+                  - video.avi --> modified video that is used for all processing. Deleted after processing to save space
                 - pytmp
                 - pywork
                   - activesd.pckl --> output of syncnet
@@ -37,12 +37,12 @@
                   - frame_confs.pckl	--> frame_level confidence of vid_audio match. syncnet output
                   - offsets.txt	first --> tracklet offset and confidence values.
                   - scenes.pckl
-                  - tracks.pckl
+                  - tracks.pckl --> output of syncnet run_pipeline.py script
               - `-F36RtHH4hY`
             - -F36RtHH4hY.txt . --> output: stored as youtubeID.txt.
             - 85gmwnfty7o.txt
             - done.txt --> should be deleted manually if you want to reprocess "Barack Obama Folder"
-            - template_face.npy --> output of utils/face_template.py script. Vector that represents Obama's face
+            - template_face.npy --> output of utils/face_template.py script. vector that represents Obama's face
          - Mo Salah
          - Son Heung Min
          - Stephen A Smith
@@ -51,10 +51,10 @@
   - #### Running Unsupervised Script
      - compile a list of youtube_channel urls.
      - modify run_unsup_recipe.sh with your urls.
-     - run "./run_unsup_recipe.sh"
-     - Eg: ./run_unsup_recipe.sh gpu_num exp_dir
-     - Eg: ./run_unsup_recipe.sh 1 exp_tunisia
-     - outputs stored as youtubeID.num.txt. Eg. `85gmwnfty7o`.8.txt
+     - run `./run_unsup_recipe.sh`
+     - Eg: `./run_unsup_recipe.sh   gpu_num   exp_dir`
+     - Eg: `./run_unsup_recipe.sh   1   exp_tunisia`
+     - outputs stored as youtubeID.num.txt.   Eg: `85gmwnfty7o`.8.txt
 
 ### Project Overview
 The project can be split into two primary task. The first task is the case where the user provides a text file with a list of celebrites or persons of interest. For each person in the text, the system identifies times segments in a youtube video when that person is talking and stores the time segments as a text file. This task is a supervised search of a specific individual in a youtube video. The second task is unsupervised. This system was develop for the case where there might not be enough data for individuals in a particular language, eg. GA Language. In this scenario, the user provides a youtube channel where the people in that channel speak that relatively obscure language. The system then downloads videos from this channel and performs both intra-video clustering and inter-video clustering to obtain unique voices of various speakers.
