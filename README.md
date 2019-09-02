@@ -9,11 +9,24 @@
   - Might not be necessary. But do this if there are "protos" error.
  
 ### Running Code:
- - create list of names in textfile. eg. 
-Call the script ./run_main.sh.
-This script reads line by line a textfile of names and calls ./run_av_recipe.sh
+  - #### Running Supervised Script
+     - create list of names in textfile. eg. celeb_names.lst
+     - run script "./run_main.sh"
+     - ./run_main.sh  names_list gpu_num exp_dir
+     - ./run_main.sh  celeb_names.lst 1 exp_ex
 
-You can run the code on a single person by directly calling ./run_av_recipe.sh args
+       This script reads line by line a textfile of names and calls ./run_av_recipe.sh
+       You can run the code on a single person by directly calling ./run_av_recipe.sh args
+       
+       
+  - #### Running Unsupervised Script
+     - create list of names in textfile. eg. celeb_names.lst
+     - run script "./run_main.sh"
+     - ./run_main.sh  names_list gpu_num exp_dir
+     - ./run_main.sh  celeb_names.lst 1 exp_ex
+
+       This script reads line by line a textfile of names and calls ./run_av_recipe.sh
+       You can run the code on a single person by directly calling ./run_av_recipe.sh args
 
 ### Project Overview
 The project can be split into two primary task. The first task is the case where the user provides a text file with a list of celebrites or persons of interest. For each person in the text, the system identifies times segments in a youtube video when that person is talking and stores the time segments as a text file. This task is a supervised search of a specific individual in a youtube video. The second task is unsupervised. This system was develop for the case where there might not be enough data for individuals in a particular language, eg. GA Language. In this scenario, the user provides a youtube channel where the people in that channel speak that relatively obscure language. The system then downloads videos from this channel and performs both intra-video clustering and inter-video clustering to obtain unique voices of various speakers.
