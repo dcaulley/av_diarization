@@ -1,4 +1,4 @@
-# av_diarization
+# Audio Visual Diarization
 
 ### Project Setup
 - Create python3 environment - tested using python=3.6.5
@@ -25,7 +25,7 @@
             - images --> downloaded images folder used to create template_face.
             - videos ---> downloaded youtube videos with frame rates not processed yet.
             - video_processing
-              - 85gmwnfty7o
+              - `85gmwnfty7o` --> youtube ID
                 - pyavi
                   - video.avi --> modified video that is used for all processing. deleted after processing to save space
                 - pytmp
@@ -38,7 +38,7 @@
                   - offsets.txt	first --> tracklet offset and confidence values.
                   - scenes.pckl
                   - tracks.pckl
-              - -F36RtHH4hY
+              - `-F36RtHH4hY`
             - -F36RtHH4hY.txt . --> output: stored as youtubeID.txt.
             - 85gmwnfty7o.txt
             - done.txt --> should be deleted manually if you want to reprocess "Barack Obama Folder"
@@ -54,6 +54,7 @@
      - run "./run_unsup_recipe.sh"
      - Eg: ./run_unsup_recipe.sh gpu_num exp_dir
      - Eg: ./run_unsup_recipe.sh 1 exp_tunisia
+     - outputs stored as youtubeID.num.txt. Eg. `85gmwnfty7o`.8.txt
 
 ### Project Overview
 The project can be split into two primary task. The first task is the case where the user provides a text file with a list of celebrites or persons of interest. For each person in the text, the system identifies times segments in a youtube video when that person is talking and stores the time segments as a text file. This task is a supervised search of a specific individual in a youtube video. The second task is unsupervised. This system was develop for the case where there might not be enough data for individuals in a particular language, eg. GA Language. In this scenario, the user provides a youtube channel where the people in that channel speak that relatively obscure language. The system then downloads videos from this channel and performs both intra-video clustering and inter-video clustering to obtain unique voices of various speakers.
