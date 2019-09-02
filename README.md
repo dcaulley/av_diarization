@@ -19,6 +19,33 @@
        You can run the code on a single person by directly calling ./run_av_recipe.sh args
        
      - Folder Structure
+     
+       - exp_ex
+         - Barack Obama
+            - images --> downloaded images folder used to create template_face.
+            - videos ---> downloaded youtube videos with frame rates not processed yet.
+            - video_processing
+              - 85gmwnfty7o
+                - pyavi
+                  - video.avi --> modified video that is used for all processing. deleted after processing to save space
+                - pytmp
+                - pywork
+                  - activesd.pckl --> output of syncnet
+                  - alltracks.pckl
+                  - faces.pckl --> output of face_verification_tracking.py script
+                  - fps.txt	--> resampled to 25 fps if frame rate is greater than 25. Else keep at original rate
+                  - frame_confs.pckl	--> frame_level confidence of vid_audio match. syncnet output
+                  - offsets.txt	first --> tracklet offset and confidence values.
+                  - scenes.pckl
+                  - tracks.pckl
+              - -F36RtHH4hY
+            - -F36RtHH4hY.txt . --> output: stored as youtubeID.txt.
+            - 85gmwnfty7o.txt
+            - done.txt --> should be deleted manually if you want to reprocess "Barack Obama Folder"
+            - template_face.npy --> output of utils/face_template.py script. Vector that represents Obama's face
+         - Mo Salah
+         - Son Heung Min
+         - Stephen A Smith
        
        
   - #### Running Unsupervised Script
