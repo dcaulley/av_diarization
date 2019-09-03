@@ -9,6 +9,9 @@
   - `pip install -r "requirements.txt"`
     - might need to upgrade pip first `pip install --upgrade pip`
   - Also install ffmpeg = 3.4.2  -- any version should be fine I think
+  - Error `'cv2.cv2' has no attribute 'TrackerCSRT_create'`
+    - occurs if `opencv-contrib-python` is installed before opencv-python
+    - solution: `pip uninstall opencv-contrib-python` then `pip install opencv-contrib-python`
 - Install the specific versions of those packages.
 - run "sh download_model.sh" under syncnet_python_rev
   - Might not be necessary. But do this if there are "protos" error.
