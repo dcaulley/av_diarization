@@ -1,8 +1,12 @@
 # Audio Visual Diarization
 
 ### Project Setup
-- Create python3 environment - tested using python=3.6.5
+- Create python3 environment (mandatory) - tested using python=3.6.5
+  - `python3 -m venv /path/to/new/virtual/environment` 
+     - will generate error if you use `virtualenv` command
+  - activate that environment
 - Install all packages found in `requirements.txt` file
+  - pip install -r "requirements.txt"
   - Also install ffmpeg = 3.4.2  -- any version should be fine I think
 - Install the specific versions of those packages.
 - run "sh download_model.sh" under syncnet_python_rev
