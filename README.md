@@ -19,7 +19,9 @@
      - run script `./run_main.sh`
      - Eg: `./run_main.sh  names_list   gpu_num   exp_dir`
      - Eg: `./run_main.sh  celeb_names.lst   1  exp_ex`
-
+     - You can configure each of scripts to use a percentage of GPU. It's already setup in the code.
+        - Eg. Change line 110 in `utils/face_templates.py` from 0.8 to 0.25 to use 25% of GPU
+        
        This script reads a text file line by line and calls `./run_av_recipe.sh`
        You can run the code on a single person by directly calling `./run_av_recipe.sh args`
        
