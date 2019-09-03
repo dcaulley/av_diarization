@@ -23,13 +23,13 @@ echo "$celeb"
 
 if [ -d "$vid_pro" ] && [ -f "$exp_dir"/curr_working.lst ]; then
 	#exit 0  #uncomment if you want to run parallel processing on gpu without redundant processing
-	pass
+	:
 fi
 
 
 if [ -f "$exp_dir"/done.lst ]; then
 	#exit 0 #uncomment if you want to run parallel processing on gpu without redundant processing
-	pass
+	:
 fi
 
 mkdir -p "$vid_pro"
