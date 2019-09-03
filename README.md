@@ -6,7 +6,8 @@
      - will generate error if you use `virtualenv` command
   - activate that environment
 - Install all packages found in `requirements.txt` file
-  - pip install -r "requirements.txt"
+  - `pip install -r "requirements.txt"`
+    - might need to upgrade pip first `pip install --upgrade pip`
   - Also install ffmpeg = 3.4.2  -- any version should be fine I think
 - Install the specific versions of those packages.
 - run "sh download_model.sh" under syncnet_python_rev
