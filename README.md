@@ -10,6 +10,7 @@
   - `pip install -r "requirements.txt"`
     - might need to upgrade pip first `pip install --upgrade pip`
     - install those specific package versions
+    - for newer cuda versions > 9.1 use newer tensorflow-gpu >= 1.14
   - Also install ffmpeg = 3.4.2  -- any version should be fine I think
   - Error `'cv2.cv2' has no attribute 'TrackerCSRT_create'`
     - occurs if `opencv-contrib-python` is installed before opencv-python
