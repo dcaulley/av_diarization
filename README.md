@@ -5,6 +5,7 @@
   - `python3 -m venv /path/to/new/virtual/environment` 
      - will generate error if you use `virtualenv` command
   - activate that environment
+    - `source /path_to_new_virtual_environment/bin/activate` 
 - Install all packages found in `requirements.txt` file
   - `pip install -r "requirements.txt"`
     - might need to upgrade pip first `pip install --upgrade pip`
